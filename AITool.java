@@ -1,5 +1,7 @@
 package utils;
 
+import com.robrua.nlp.bert.Bert;
+
 public class AITool {
     public int minDistance_recursive(String str1, String str2){
         // 计算两个字符串的长度
@@ -77,18 +79,40 @@ public class AITool {
             }
         }
 
-//        for(int j = 0; j < s2.length(); j++){
-//            System.out.print(" " + s2.charAt(j));
-//        }
-//
-//        for(int i = 0; i < s1.length(); i++){
-//            System.out.println("");
-//            System.out.print(s1.charAt(i) + " ");
-//            for(int j = 0; j < s2.length(); j++){
-//                System.out.print(matrix[i][j] + " ");
-//            }
-//        }
-
         return matrix[s1.length()][s2.length()];
+    }
+
+    // cos x = a * b / |a| * |b|
+    public double similarity_bert(String s1, String s2){
+        float[] s1_value = bert(s1);
+        float[] s2_value = bert(s2);
+
+        float product = 0;
+        for(int i = 0; i < s1_value.length; i++){
+            product = product + s1_value[i] * s2_value[i];
+        }
+
+        float sum1 = 0;
+        for(float f: s1_value){
+            sum1 = sum1 + f * f;
+        }
+
+        float sum2 = 0;
+        for(float f: s2_value){
+            sum2 = sum2 + f * f;
+        }
+
+        double cosX = product / Math.sqrt(sum1) / Math.sqrt(sum2);
+
+        return cosX;
+    }
+
+    public float[] bert(String s){
+        try(Bert bert = Bert.load("com/robrua/nlp/easy-bert/bert-chinese-L-12-H-768-A-12")) {
+            // Embed some sequences
+            float[] embedding = bert.embedSequence(s);
+            // System.out.println(Arrays.toString(embedding));
+            return embedding;
+        }
     }
 }
