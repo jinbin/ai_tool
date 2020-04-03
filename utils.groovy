@@ -108,6 +108,7 @@ class utils {
     }
 
     // 编辑距离的算法是首先由俄国科学家Levenshtein提出的，故又叫Levenshtein Distance
+    // This recursive implementation is very inefficient because it recomputes the Levenshtein distance of the same substrings many times.
     def 判断中文字符串相似度(String s1, String s2){
         //使用递归算法
         if(s1.length() == 0){
