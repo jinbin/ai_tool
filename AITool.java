@@ -69,10 +69,6 @@ public class AITool {
             for(int j = 0; j < s2.length() + 1; j++){
                 // 若matrix[i][j] = -1，则表示未计算距离
                 if(matrix[i][j] < 0){
-                    //matrix[i][j] = Math.min(Math.min(matrix[i-1][j], matrix[i][j-1]), matrix[i-1][j-1]);
-                    //if(s1.charAt(i-1) != s2.charAt(j-1)){
-                    //    matrix[i][j] = matrix[i][j] + 1;
-                    //}
 
                     int tmp1 = matrix[i-1][j-1];
                     if(s1.charAt(i-1) != s2.charAt(j-1)){
