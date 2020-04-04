@@ -83,36 +83,72 @@ public class AITool {
     }
 
     // cos x = a * b / |a| * |b|
-    public double similarity_bert(String s1, String s2){
-        float[] s1_value = bert(s1);
-        float[] s2_value = bert(s2);
+    // 0.9723421414323189
+    // 0.9723421335220337
+    public double similarity_bert(String s1, String s2) throws Exception {
+        String model = "com/robrua/nlp/easy-bert/bert-chinese-L-12-H-768-A-12";
+        float[] s1_value = bert(model, s1);
+        float[] s2_value = bert(model, s2);
 
-        float product = 0;
-        for(int i = 0; i < s1_value.length; i++){
-            product = product + s1_value[i] * s2_value[i];
-        }
-
-        float sum1 = 0;
-        for(float f: s1_value){
-            sum1 = sum1 + f * f;
-        }
-
-        float sum2 = 0;
-        for(float f: s2_value){
-            sum2 = sum2 + f * f;
-        }
-
-        double cosX = product / Math.sqrt(sum1) / Math.sqrt(sum2);
-
-        return cosX;
+        return vector_cosX(s1_value, s2_value);
     }
 
-    public float[] bert(String s){
-        try(Bert bert = Bert.load("com/robrua/nlp/easy-bert/bert-chinese-L-12-H-768-A-12")) {
+    public float[] bert(String model, String s){
+        try(Bert bert = Bert.load(model)) {
             // Embed some sequences
             float[] embedding = bert.embedSequence(s);
             // System.out.println(Arrays.toString(embedding));
             return embedding;
         }
+    }
+
+    public float[] vector_add(float[] v1, float[] v2) throws Exception {
+        if(v1.length != v2.length){
+            throw new Exception("Two vectors' length not equal! Please check.");
+        }
+
+        float[] result = new float[v1.length];
+        for(int i = 0; i < v1.length; i++){
+            result[i] = v1[i] + v2[i];
+        }
+
+        return result;
+    }
+
+    // dot product of v1, v2 = |v1| * |v2| * cosx
+    public float vector_dotproduct(float[] v1, float[] v2) throws Exception {
+        if(v1.length != v2.length){
+            throw new Exception("Two vectors' length not equal! Please check.");
+        }
+
+        float result = 0;
+        for(int i = 0; i < v1.length; i++){
+            result = result + v1[i] * v2[i];
+        }
+
+        return result;
+    }
+
+    public float vector_length(float[] v1) throws Exception {
+        if(v1.length == 0){
+            throw new Exception("The vector's length is zero! Please check.");
+        }
+
+        float result = 0;
+        for(int i = 0; i < v1.length; i++){
+            result = result + v1[i] * v1[i];
+        }
+
+        return (float)Math.sqrt(result);
+    }
+
+    public float vector_cosX(float[] v1, float[] v2) throws Exception {
+        if(v1.length != v2.length){
+            throw new Exception("Two vectors' length not equal! Please check.");
+        }
+
+        float cosX = vector_dotproduct(v1, v2) / (vector_length(v1) * vector_length(v2));
+
+        return cosX;
     }
 }
