@@ -74,7 +74,7 @@ public class AITool {
                     if(s1.charAt(i-1) != s2.charAt(j-1)){
                         tmp1 = tmp1 + 1;
                     }
-                    matrix[i][j] = Math.min(Math.min(matrix[i-1][j], matrix[i][j-1]), tmp1);
+                    matrix[i][j] = Math.min(Math.min(matrix[i-1][j] + 1, matrix[i][j-1] + 1), tmp1);
                 }
             }
         }
@@ -83,8 +83,6 @@ public class AITool {
     }
 
     // cos x = a * b / |a| * |b|
-    // 0.9723421414323189
-    // 0.9723421335220337
     public double similarity_bert(String s1, String s2) throws Exception {
         String model = "com/robrua/nlp/easy-bert/bert-chinese-L-12-H-768-A-12";
         float[] s1_value = bert(model, s1);
