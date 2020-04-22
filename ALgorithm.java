@@ -2,7 +2,7 @@ package utils;
 
 import com.robrua.nlp.bert.Bert;
 
-public class AITool {
+public class ALgorithm {
     public int minDistance_recursive(String str1, String str2){
         // 计算两个字符串的长度
         int len1 = str1.length();
